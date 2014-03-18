@@ -1,0 +1,10 @@
+#define MAX_POINTS 100
+#define BITS 8
+#define MAX_RANGE 300
+#define PI 3.14159265
+#define OBS 1
+#define MEASURE_TOLERANCE 2
+#define STRIDE 10
+#define COLLISION_THRESHOLD 5
+#define TURN_PROBABILITY 30
+#define ARDUINO 0
