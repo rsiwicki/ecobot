@@ -11,7 +11,7 @@ class BMap {
 		short int _maxdimx;
 		short int _maxdimy;
 	
-		void AddBelief(short int x, short int y, float temp, short int obs);
+		void AddBelief(short int x, short int y, short int temp, short int obs);
 
 };
 

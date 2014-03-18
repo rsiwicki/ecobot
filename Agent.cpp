@@ -63,12 +63,6 @@ void agent_take_reading(funcSensor* sensors, WorkingMemory* wm, ActionTypes::Enu
 
     struct LocF* fact = new LocF();
     
-#if ARDUINO == 1
-    fact->t0 = 101;
-#else    
-    fact->t0 = time(NULL);
-#endif
-
     fact->s0 = ((*sensors[S0])(0));
     fact->s90 = ((*sensors[S90])(0));
     fact->s180 = ((*sensors[S180])(0));

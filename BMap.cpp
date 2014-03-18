@@ -1,18 +1,13 @@
 #include "BMap.h"
 #include <iostream>
 
-void BMap::AddBelief(short int x, short int y, float temp, short int obs) {
+void BMap::AddBelief(short int x, short int y, short int temp, short int obs) {
 
     if(_size < MAX_POINTS) {	
     	Hn* point = new Hn();
 
     	point->x=x;
     	point->y=y;
-	#if ARDUINO == 1
-    	point->t=101;
-	#else    
-    	point->t= time(NULL);
-	#endif
     	point->temp_1=temp;
     	point->is_obstacle=obs;
 
