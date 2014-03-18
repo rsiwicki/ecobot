@@ -32,6 +32,16 @@ int read_at_range_80(int opt);
 
 int read_at_range_70(int opt);
 
+int read_at_range_60(int opt);
+
+int read_at_range_50(int opt);
+
+int read_at_range_40(int opt);
+
+int read_at_range_30(int opt);
+
+int read_at_range_20(int opt);
+
 int read_at_range_15(int opt);
 
 #if ARDUINO == 1

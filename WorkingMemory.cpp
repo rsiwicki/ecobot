@@ -11,10 +11,8 @@ LocF* WorkingMemory::GetLatestFact() {
 }
 
 void WorkingMemory::AssertFact(LocF* fact) {
-    
-	_size++;
-
 	_facts[_size] = (*fact);
+	_size++;
 }
 
 
@@ -23,11 +21,13 @@ BMap* WorkingMemory::MaterializeWorld() {
 // need to plot all the obstacles as coordinates in the a' relative system
 // at the moment they are curr v relative.
 
+    if(_size < 2) {
+	std::cout << "there are too few facts \n";
+	return NULL;
+    }
+
     LocF* earliestFact = &(_facts[0]); // get the first fact and chain forwards
     
-    // DEBUG -- need to test previous fact here
-    LocF* previousFact = &(_facts[_size-2]);
-
     BMap* beliefs = new BMap();
 
     Vct* curVct = new Vct();
@@ -36,13 +36,26 @@ BMap* WorkingMemory::MaterializeWorld() {
 
     int i;
 
-    for(i=0;i<_size; i++) {
-	LocF* currentFact = &(_facts[i]);
+    std::cout << "Working Memory has " << _size << " items\n";
+
+    for(i=1;i<_size; i++) {
+
+    	LocF* previousFact = &(_facts[i-1]);
+    	LocF* currentFact = &(_facts[i]);
 	
 	int delta0 = previousFact->s0 - currentFact->s0;
 	int delta90 = previousFact->s90 - currentFact->s90;
 	int delta180 = previousFact->s180 - currentFact->s180;
 	int delta270 = previousFact->s270 - currentFact->s270;
+
+	std::cout << "previousfact is " << previousFact->s0 << "\n";
+	std::cout << "currentfact is " << currentFact->s0 << "\n";
+
+	std::cout << "delta0 is " << delta0 << "\n"; 
+	std::cout << "delta90 is " << delta90 << "\n"; 
+	std::cout << "delta180 is " << delta180 << "\n"; 
+	std::cout << "delta270 is " << delta270 << "\n"; 
+
 
 	int dOr = previousFact->ori - currentFact->ori;
 
@@ -85,13 +98,13 @@ BMap* WorkingMemory::MaterializeWorld() {
 		    // the delta should be negative i.e. we have moved away from object
 		    // by the amount of delta. Therefore new location vector is abs(delta)
 		    // but need to add 180 degrees
-		    std::cout << "delta0" <<  delta0 << "\n";
+		    std::cout << "delta0 in move is " <<  delta0 << "\n";
 
-		    if(delta0 > MEASURE_TOLERANCE) {
+		    if(Utils::pos(delta0) > MEASURE_TOLERANCE) {
 			  dVct  = Utils::lvfp(currentFact->ori, delta0); 
 			  std::cout << "Movement detected in forward sensor" << delta0 << "\n";
 		    }		    
-		    else if(delta180 < MEASURE_TOLERANCE) {
+		    else if(Utils::pos(delta180) < MEASURE_TOLERANCE) {
 			  dVct  = Utils::lvfp(currentFact->ori + 180, Utils::pos(delta180)); 
 			  std::cout << "Movement detected in aft sensor" << delta180 << "\n";
 		    }		    

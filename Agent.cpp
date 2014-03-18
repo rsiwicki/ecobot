@@ -76,8 +76,8 @@ void agent_take_reading(funcSensor* sensors, WorkingMemory* wm, ActionTypes::Enu
     wm->AssertFact(fact);
 }
 
-int main() {
 
+void RunDiagnostic() {
 	cout << "Starting Agent\n";
 
 	std::cout << "---------------------------------------------\n";
@@ -257,9 +257,9 @@ int main() {
 	
 	wm = new WorkingMemory();
 
-	sensors[S0] = &read_at_range_100;
+	sensors[S0] = &read_at_range_40;
 	sensors[S90] = &read_at_range_15;
-	sensors[S180] = &read_at_range_15;
+	sensors[S180] = &read_beyond_range;
 	sensors[S270] = &read_at_range_15;
 	sensors[T0] = &read_at_range_15;
 	sensors[OR0] = &read_orientation_is_0;
@@ -270,18 +270,15 @@ int main() {
 	agent_take_reading(sensors, wm, ActionTypes::NOP); // start with NOPs
 	agent_take_reading(sensors, wm, ActionTypes::NOP); // start with NOPs
 
-	sensors[S0] = &read_at_range_90;
+	sensors[S0] = &read_at_range_30;
 	agent_take_reading(sensors, wm, ActionTypes::MOVE); // move 
 
-	sensors[S0] = &read_at_range_80;
+	sensors[S0] = &read_at_range_20;
 	agent_take_reading(sensors, wm, ActionTypes::MOVE); // move
 
-	sensors[S0] = &read_at_range_70;
+	sensors[S0] = &read_at_range_15;
 	agent_take_reading(sensors, wm, ActionTypes::MOVE); // move
 	
-	sensors[S0] = &read_at_range_70;
-	agent_take_reading(sensors, wm, ActionTypes::NOP); // stopped 
-
 	std::cout << "generating belief map from working memory\n";
 
 	beliefs = wm->MaterializeWorld();	
@@ -302,4 +299,6 @@ int main() {
 
 }
 
-
+int main() {
+	RunDiagnostic();
+}

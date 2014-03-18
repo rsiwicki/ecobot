@@ -47,8 +47,32 @@ int read_at_range_70(int opt) {
     return 70;
 }
 
+int read_at_range_60(int opt) {
+    return 60;
+}
+
+int read_at_range_50(int opt) {
+    return 50;
+}
+
+int read_at_range_40(int opt) {
+    return 40;
+}
+
+int read_at_range_30(int opt) {
+    return 30;
+}
+
+int read_at_range_20(int opt) {
+    return 20;
+}
+
 int read_at_range_15(int opt) {
     return 15;
+}
+
+int read_at_range_dynamic(int opt) {
+    return opt;
 }
 
 #if ARDUINO == 1
