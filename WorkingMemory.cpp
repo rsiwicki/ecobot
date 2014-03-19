@@ -15,7 +15,6 @@ void WorkingMemory::AssertFact(LocF* fact) {
 	_size++;
 }
 
-
 BMap* WorkingMemory::MaterializeWorld() {
 
 // need to plot all the obstacles as coordinates in the a' relative system
@@ -168,6 +167,8 @@ BMap* WorkingMemory::MaterializeWorld() {
 
     } 
 
+    beliefs->_curx = curVct->x;
+    beliefs->_cury = curVct->y;
     return beliefs;
 
 }

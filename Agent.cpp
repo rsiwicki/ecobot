@@ -32,8 +32,8 @@ void print_belief_map(BMap* map) {
 	for(i=0;i<map->_size;i++) {
 		Hn* point = map->_points[i];
 
-		int rebasedPointX = 21 + point->x;
-		int rebasedPointY = 21 + point->y;
+		int rebasedPointX = 25 + point->x;
+		int rebasedPointY = 25 + point->y;
 		int isObstacle = point->is_obstacle;
 
 		if (rebasedPointX > 0 && rebasedPointX < 51 && rebasedPointY > 0 && rebasedPointY < 51) {
@@ -47,7 +47,12 @@ void print_belief_map(BMap* map) {
 	for(y=51;y>=0;y--) {
 		printf("\n");
 		for(x=0;x<51;x++) {
-			if(grid[x][y]==0) {
+			if(x == (map->_curx +25) && y == (map->_cury+25)) {
+				printf(" ^");
+			}
+			else if(x == 25 && y == 25) {
+				printf(" 0");
+			} else if(grid[x][y]==0) {
 				printf(" -");
 			} else {
 				printf(" %d", grid[x][y]);	
@@ -290,9 +295,28 @@ void RunDiagnostic() {
 	delete wm;
 	delete beliefs;
 
-
-
 	std::cout << "print should show a tunnel\n";
+
+	delete s;
+
+
+	std::cout << "---------------------------------------------\n";
+	std::cout << "Test Highest Yielding Strategy\n";
+	std::cout << "---------------------------------------------\n";
+	
+	
+	s = sf->makeStrategy(StrategyTypes::HIGHEST_YIELD);
+
+	sensors[S0] = &read_within_range;
+	sensors[S90] = &read_within_range;
+	sensors[S180] = &read_within_range;
+	sensors[S270] = &read_within_range;
+	
+	action = s->getHighestYieldingAction(sensors, beliefs, 0, 0, 0, 0);
+	std::cout << "Agent should MOVE 1 m 10 " << action->c << " " << action->m  << "\n";
+
+	delete action;
+
 
 	delete s;
 	delete sf;
