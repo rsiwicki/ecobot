@@ -26,6 +26,11 @@ template<typename T> class Ring {
 			_head++;
 		}
 
+		T* GetLatest() {
+			if(_head > 1) {
+				return _queue[(_head-1) % _k];
+			}
+		}
 
 };
 /*

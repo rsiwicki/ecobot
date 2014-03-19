@@ -5,8 +5,9 @@
 #include "thresholds.h"
 
 class BMap {
-	public:	
+	private:
 		Hn* _points[MAX_POINTS];
+	public:	
 		short int _size;
 		short int _maxdimx;
 		short int _maxdimy;
@@ -14,6 +15,8 @@ class BMap {
 		short int _cury;
 
 		void AddBelief(short int x, short int y, short int temp, short int obs);
+
+		Hn* GetPoint(int i);	
 
 };
 

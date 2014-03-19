@@ -26,3 +26,7 @@ void BMap::AddBelief(short int x, short int y, short int temp, short int obs) {
     }
 }
 
+Hn* BMap::GetPoint(int index) {
+	return _points[index];
+}
+

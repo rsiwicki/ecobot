@@ -30,7 +30,7 @@ void print_belief_map(BMap* map) {
 	int i;
 
 	for(i=0;i<map->_size;i++) {
-		Hn* point = map->_points[i];
+		Hn* point = map->GetPoint(i);
 
 		int rebasedPointX = 25 + point->x;
 		int rebasedPointY = 25 + point->y;
