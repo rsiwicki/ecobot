@@ -7,12 +7,17 @@ template<typename T> class Ring {
 	private:
 		int _k;
 		int _head;
-		T* _queue[];
+		T** _queue;
 
 	public:
-		Ring(int k) { _k = k; _head=0;}
+		Ring(int k) { 
+			_k = k; 
+			_head=0;
+			_queue = new T*[k];
+		}
 		
 		~Ring() {
+			std::cout << _head << "\n";
 			delete [] _queue;
 		}
 		

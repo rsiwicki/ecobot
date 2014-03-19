@@ -8,11 +8,13 @@ class WorkingMemory {
 	private:
 		LocF* _facts;
 		int _size;
-
+		Vct* rolledUpOrigin;
+		Vct* currentVct;
 	public:
 		WorkingMemory();
 		~WorkingMemory() {delete [] _facts;}
 		BMap* MaterializeWorld();
 		LocF* GetLatestFact();	
 		void AssertFact(LocF* fact);	
+		void UpdatePosition();
 };

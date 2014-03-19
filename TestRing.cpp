@@ -11,9 +11,18 @@ int main() {
 	for(int i =0; i < 10 ; i++) {
 
 		Hn* hn1 = new Hn();
-		hn1->x = 1;
-		hn1->y = 1;
+		hn1->x = i;
+		hn1->y = i;
 
 		ring->Enqueue(hn1);
 	}
+
+
+	Hn* hnr = ring->GetLatest();
+
+	std::cout << hnr->x << "\n"; 
+
+
+	delete ring;
+
 }

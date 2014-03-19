@@ -246,7 +246,9 @@ void RunDiagnostic() {
 	
 	sensors[S0] = &read_at_range_70;
 	agent_take_reading(sensors, wm, ActionTypes::NOP); // stopped 
-
+	agent_take_reading(sensors, wm, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm, ActionTypes::NOP); // start with NOPs
+	
 	std::cout << "generating belief map from working memory\n";
 
 	beliefs = wm->MaterializeWorld();	
