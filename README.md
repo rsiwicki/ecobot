@@ -21,6 +21,14 @@ Currently the ecobot supports two strategies for navigating its world. The first
 
 The second strategy is the HIGHEST YIELD strategy. The highest yield strategy will apply a KNN like strategy to determine areas that have the highest interest or yield. Currently the yield is fixed to an area that ecobot has not visited before but could use any sensor reading such as temperature. 
 
+TODO
+
+Need to change the belief map storage to a KDTree. Instead of building a list or a separate KTree integrating the two will save memory and allow for the O(log N) generation of KNN instead of a niave O (N*N) implementation..
+
+
+
+
+
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - - - - - - - - - - 1 - - - - - - - - - - - - - - ^ - - - - - - - - - - - - - - 1 - - - - - - - - - -
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
