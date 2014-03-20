@@ -22,7 +22,7 @@ template<typename T> class Ring {
 		}
 		
 		void Enqueue(T* item) {
-			std::cout << "Enqueing \n";
+			std::cout << "Enqueueing \n";
 			if(_head >= _k) {
 				std::cout << "Overflowing\n";
 				delete _queue[_head % _k];
@@ -31,11 +31,28 @@ template<typename T> class Ring {
 			_head++;
 		}
 
+		int GetSize() {
+			if(_head < _k) {
+				return _head;
+			};
+			
+			return _k;	
+		}
+
 		T* GetLatest() {
 			if(_head > 1) {
 				return _queue[(_head-1) % _k];
 			}
 		}
+
+		T* GetLatestMinus(int delta) {
+			int offset = delta + 1;
+			if(_head - offset >= 0) {
+				return _queue[(_head-offset) % _k];
+			}
+		}
+
+
 
 };
 /*

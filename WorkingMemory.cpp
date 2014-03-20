@@ -3,7 +3,10 @@
 
 WorkingMemory::WorkingMemory() {
     _size = 0;
-    _facts = new LocF[MAX_POINTS]; // DEBUG -- dynamic
+    //_facts = new LocF[MAX_POINTS]; // DEBUG -- dynamic
+
+    // set up the ring buffer
+    _facts = new Ring<LocF>(MAX_POINTS);
 
     // now we always have current vector
     // as long as working memory is active
@@ -15,7 +18,7 @@ WorkingMemory::WorkingMemory() {
 }
 
 LocF* WorkingMemory::GetLatestFact() {
-    return &(_facts[_size-1]);
+    return _facts->GetLatest();
 }
 
 // asserting a new fact can overflow the ring buffer
@@ -34,7 +37,7 @@ LocF* WorkingMemory::GetLatestFact() {
 // every assertion with the rollup of the SIZE - K facts.
 // This seems a bit dense. So instead going for option 1. 
 void WorkingMemory::AssertFact(LocF* fact) {
-	_facts[_size] = (*fact);
+	_facts->Enqueue(fact);
 	_size++;
 	UpdatePosition();
 }
@@ -47,21 +50,24 @@ void WorkingMemory::UpdatePosition() {
 
     std::cout << "IN UPDATE POSITION\n";
 
-    if(_size < 2) {
+    if(_facts->GetSize() < 2) {
 	std::cout << "there are too few facts \n";
 	return;
     }
 
     int i;
 
-    std::cout << "Working Memory has " << _size << " items\n";
+    std::cout << "Working Memory has " << _facts->GetSize() << " items\n";
 
-    i = _size;
+    i = _facts->GetSize();
 
-    	LocF* previousFact = &(_facts[i-2]);
-    	LocF* currentFact = &(_facts[i-1]);
+    	//LocF* previousFact = &(_facts[i-2]);
+    	//LocF* currentFact = &(_facts[i-1]);
 	
-	int delta0 = previousFact->s0 - currentFact->s0;
+    	LocF* previousFact = _facts->GetLatestMinus(1);
+    	LocF* currentFact = _facts->GetLatest();
+	
+    	int delta0 = previousFact->s0 - currentFact->s0;
 	int delta90 = previousFact->s90 - currentFact->s90;
 	int delta180 = previousFact->s180 - currentFact->s180;
 	int delta270 = previousFact->s270 - currentFact->s270;
@@ -142,7 +148,7 @@ BMap* WorkingMemory::MaterializeWorld() {
 // need to plot all the obstacles as coordinates in the a' relative system
 // at the moment they are curr v relative.
 
-    if(_size < 2) {
+    if(_facts->GetSize() < 2) {
 	std::cout << "there are too few facts \n";
 	return NULL;
     }
@@ -160,13 +166,16 @@ BMap* WorkingMemory::MaterializeWorld() {
 
     int i;
 
-    std::cout << "Working Memory has " << _size << " items\n";
+    std::cout << "Working Memory has " << _facts->GetSize() << " items\n";
 
-    for(i=_size;i>1; i--) {
+    for(i=0;i<_facts->GetSize()-1; i++) {
 
-    	LocF* previousFact = &(_facts[i-2]);
-    	LocF* currentFact = &(_facts[i-1]);
-	
+    	//LocF* previousFact = &(_facts[i-2]);
+    	//LocF* currentFact = &(_facts[i-1]);
+
+    	LocF* previousFact = _facts->GetLatestMinus(i+1);
+    	LocF* currentFact = _facts->GetLatestMinus(i);
+
 	int delta0 = previousFact->s0 - currentFact->s0;
 	int delta90 = previousFact->s90 - currentFact->s90;
 	int delta180 = previousFact->s180 - currentFact->s180;

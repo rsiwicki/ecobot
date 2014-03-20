@@ -257,7 +257,8 @@ void RunDiagnostic() {
 	print_belief_map(beliefs);
 	std::cout << "print should show a single point\n";
 
-	delete wm;
+	// DEBUG - fix the leak
+	//delete wm;
 	delete beliefs;
 
 	std::cout << "Simulating moving toward obstacle bearing 0 degrees with objects on all sides\n";
