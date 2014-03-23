@@ -1,9 +1,19 @@
 #include <iostream>
 #include "YieldStrategy.h"
 #include "Action.h"
+#include "kdtree.h"
+#include "math.h"
 
 using namespace std;
 
+static double dist_sq( double *a1, double *a2, int dims ) {
+	  double dist_sq = 0, diff;
+	    while( --dims >= 0 ) {
+		        diff = (a1[dims] - a2[dims]);
+			    dist_sq += diff*diff;
+			      }
+	      return dist_sq;
+}
 
 Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* map, int curOr, int curXBel, int curYBel, int tProb){
 
@@ -21,7 +31,9 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
 
     int* vds =(int*) malloc(sizeof(int) * 4); 
     int svds = 0;
-
+/********************************************************************************
+	DO COLLISION AVOIDANCE FIRST
+********************************************************************************/
     Action* next = new Action();
     next->c = ActionTypes::NOP;
     next->m = 0;
@@ -53,6 +65,65 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
 	    *(vds+svds) = 270;
 	    svds++;
     }
+
+/***************************************************************************
+	NOW WORK OUT YIELD
+***************************************************************************/
+// can only move in a direction that is in svds
+// so test each available location for KNN density
+
+    kdtree *kd;
+    kdres  *set;
+
+    char *data, *pch;
+
+    double pos[3], dist;
+    double pt[3] = { 0, 0, 1 };
+    double radius = 10;
+
+    kd = kd_create(3);
+
+    kd_insert3(kd, 1, 2, 0, 1);
+    kd_insert3(kd, 2, 2, 0, 0);
+    kd_insert3(kd, 5, 2, 0, 0);
+    kd_insert3(kd, 7, 2, 0, 0);
+    kd_insert3(kd, 8, 2, 0, 0);
+    kd_insert3(kd, 9, 2, 0, 1);
+
+
+    /* find points closest to the origin and within distance radius */
+    set = kd_nearest_range(kd, pt, radius );
+
+    std:: cout << "size of set is: " << kd_res_size(set)<< "\n";
+
+
+    while( !kd_res_end(set)) {
+	    /* get the data and position of the current result item */
+	    std::cout << "iterator 1 " << "\n";
+	    pch = (char*)kd_res_item( set, pos );
+
+	    std::cout << "iterator 1 " << "\n";
+ 	    /* compute the distance of the current result from the pt */
+	    dist = sqrt( dist_sq( pt, pos, 3 ) );
+
+	    std::cout << "dist: " << dist << "\n"; 
+
+	    /* print out the retrieved data */
+            printf( "node at (%.3f, %.3f, %.3f) is %.3f", 
+				                  pos[0], pos[1], pos[2], dist);
+//
+// 	    /* go to the next entry */
+	    kd_res_next( set);
+    }
+
+
+
+  //  free(data);
+//    kd_res_free(set);
+ //   kd_free(kd);
+
+
+
 #if ARDUINO == 1
     if((random(1,101)) < tProb) {
         int index = random(0,svds);

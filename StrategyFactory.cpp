@@ -8,9 +8,12 @@ IStrategy* StrategyFactory::makeStrategy(StrategyTypes::Enum selector) {
 	
 	switch (selector) {
 		case StrategyTypes::HIGHEST_YIELD:
+			std::cout << "highest yeild\n";
 			s = new YieldStrategy();
+			break;
 		default:
 			s = new CollisionAvoidanceStrategy();
+			break;
 	}
 
 	return s;
