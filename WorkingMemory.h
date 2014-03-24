@@ -16,7 +16,7 @@ class WorkingMemory {
 		Vct* currentVct;
 	public:
 		WorkingMemory();
-		~WorkingMemory() {delete [] _facts;}
+		~WorkingMemory() {delete _facts;}
 		BMap* MaterializeWorld();
 		LocF* GetLatestFact();	
 		void AssertFact(LocF* fact);	

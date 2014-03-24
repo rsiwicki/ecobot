@@ -75,32 +75,49 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
     kdtree *kd;
     kdres  *set;
 
-    char *data, *pch;
+    char *data;
+    int pch;
 
     double pos[3], dist;
-    double pt[3] = { 0, 0, 1 };
-    double radius = 10;
+    double pt[3] = { 7, 7, 0 };
+    double radius = 2;
+
+// need to fix the radius via thresholds.h
 
     kd = kd_create(3);
 
     kd_insert3(kd, 1, 2, 0, 1);
     kd_insert3(kd, 2, 2, 0, 0);
     kd_insert3(kd, 5, 2, 0, 0);
-    kd_insert3(kd, 7, 2, 0, 0);
-    kd_insert3(kd, 8, 2, 0, 0);
+    kd_insert3(kd, 7, 7, 0, 0);
+    kd_insert3(kd, 8, 7, 0, 0);
     kd_insert3(kd, 9, 2, 0, 1);
-
+    kd_insert3(kd, 9, 2, 0, 1);
+    kd_insert3(kd, 1, 7, 0, 1);
+    kd_insert3(kd, 5, 2, 0, 1);
+    kd_insert3(kd, 7, 2, 0, 1);
+    kd_insert3(kd, 4, 7, 0, 1);
+    kd_insert3(kd, 7, 7, 0, 1);
+    kd_insert3(kd, 8, 7, 0, 1);
+    kd_insert3(kd, 8, 2, 0, 1);
+    kd_insert3(kd, 8, 2, 0, 1);
+    kd_insert3(kd, 8, 7, 0, 1);
+    kd_insert3(kd, 7, 2, 0, 1);
+    kd_insert3(kd, 9, 2, 0, 1);
+    kd_insert3(kd, 9, 2, 0, 1);
 
     /* find points closest to the origin and within distance radius */
     set = kd_nearest_range(kd, pt, radius );
 
     std:: cout << "size of set is: " << kd_res_size(set)<< "\n";
 
-
-    while( !kd_res_end(set)) {
+    int sum;
+    sum = 0;
+// 
+ while(!kd_res_end(set)) {
 	    /* get the data and position of the current result item */
 	    std::cout << "iterator 1 " << "\n";
-	    pch = (char*)kd_res_item( set, pos );
+	    pch = kd_res_item( set, pos );
 
 	    std::cout << "iterator 1 " << "\n";
  	    /* compute the distance of the current result from the pt */
@@ -109,8 +126,8 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
 	    std::cout << "dist: " << dist << "\n"; 
 
 	    /* print out the retrieved data */
-            printf( "node at (%.3f, %.3f, %.3f) is %.3f", 
-				                  pos[0], pos[1], pos[2], dist);
+            printf( "node at (%.3f, %.3f, %.3f) is %.3f val %d", 
+				                  pos[0], pos[1], pos[2], dist, pch);
 //
 // 	    /* go to the next entry */
 	    kd_res_next( set);

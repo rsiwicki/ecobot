@@ -295,7 +295,7 @@ void RunDiagnostic() {
 	print_belief_map(beliefs);
 	std::cout << "print should show a single point at bearing 0 with a tunnel on all sides\n";
 
-	//delete wm;
+//	delete wm;
 	delete beliefs;
 
 	std::cout << "print should show a tunnel\n";
@@ -356,6 +356,8 @@ void RunDiagnostic() {
 
 	action = s->getHighestYieldingAction(sensors, beliefs, 0, 0, 0, 0);
 	std::cout << "Agent should MOVE 1 m 10 " << action->c << " " << action->m  << "\n";
+
+	delete wm2;
 
 	delete s;
 	delete sf;

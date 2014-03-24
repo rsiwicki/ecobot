@@ -1,7 +1,7 @@
 template<class T> Ring<T>::Ring(int k) {
 	_k = k;
 	_head = 0;
-	T* _queue = new T[k]; 
+	T* _queue = new T[k](); 
 }
 
 template<class T> Ring<T>::~Ring() {
