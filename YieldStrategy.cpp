@@ -67,11 +67,6 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
     }
 
 
-	int suggestedBearing = YieldFunction1(map, vds, svds);
-
-	std::cout << "Suggested Bearing is " << suggestedBearing << "\n";
-
-
 #if ARDUINO == 1
     if((random(1,101)) < tProb) {
         int index = random(0,svds);
@@ -79,8 +74,22 @@ Action* YieldStrategy::getHighestYieldingAction(const funcSensor* sensors,BMap* 
     if((rand() % 100) < tProb) {
     	int index = rand() % svds;
 #endif	    
-	next->c = ActionTypes::TURN;
-   	next->m = *(vds+index);
+    	// the yield function has been applied to get the best directoin to 
+	// turn
+	int suggestedBearing = YieldFunction1(map, vds, svds);
+
+	std::cout << "Suggested Bearing is " << suggestedBearing << "\n";
+
+	// check to see if bearing has been selected properly
+	// else select a bearing at random
+	if(suggestedBearing >= 0) {
+		next->c = ActionTypes::TURN;
+   		next->m = suggestedBearing;
+	} else  {
+		next->c = ActionTypes::TURN;
+   		next->m = *(vds+index);
+	}
+    
     } else {
 
 	int i;
@@ -121,14 +130,18 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
     std::cout << "current x : " << map->_curx << "\n";
     std::cout << "current y : " << map->_cury << "\n";
 
-    for(int i=0;i<map->_size;i++) {
+    // DEBUG - fix the OBO error
+    // is it to do the primer facts
+    for(int i=2;i<map->_size-1;i++) {
 	
 	Hn* point = map->GetPoint(i);
 
-	//std::cout << "point x " << point->x << "\n";
+	std::cout << "adding point to kd tree \n";
+	std::cout << "point x " << point->x << "\n";
+	std::cout << "point y " << point->y << "\n";
 
-	int x = 0; //point->x;
-	int y = -10 + i; //point->y;
+	int x = point->x;
+	int y = point->y;
 	int is_obstacle = 1; // fix the density = point->is_obstacle;
 
 	kd_insert3(kd,x,y,0,is_obstacle);
@@ -160,16 +173,20 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
     // points to check
     //
 
-    float max;
-    max = 0.0;
+    float min;
+    min = 9999.0; // DBEUG - arbritrary max
 
     int targetBearing;
-    targetBearing = 0.0;
+    targetBearing = -700.0; // default to nonsense
 
+    std::cout << "there are " << sizeViableDirections << " viable directions that wont result in an immediate collision\n";
 
     for(int x=0;x<sizeViableDirections;x++) {
 
     int direction = *(viableDirections+x);
+
+    std::cout << "direction is " << direction << "\n";
+
     int targetDistance = STRIDE;// * 2;
 
     std::cout << "checking bearing " << direction << "\n";
@@ -182,6 +199,8 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
     
     Vct* offsetVct;
 
+    // DEBUG -- need to do more analysis of dynamic distances
+    // and radius configuration
     offsetVct = Utils::lvfp(direction, targetDistance);
     
     int targetX = currentX + offsetVct->x;
@@ -196,7 +215,7 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
     int pch;
     double pos[3], dist;
     double pt[3] = { targetX, targetY, 0 };
-    double radius = 10;
+    double radius = 10; // this should be configurable
  
     /* find points closest to the origin and within distance radius */
     set = kd_nearest_range(kd, pt, radius );
@@ -206,6 +225,13 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
     int size = 0;
     size = kd_res_size(set);
 
+    // DEBUG - with density if the size is 0 then it's good to go there
+    if(size==0) {
+		std::cout << "setting new bearing\n";
+		min = 0;
+		targetBearing = direction;
+    }
+    
     int sum;
     sum = 0;
     
@@ -229,13 +255,17 @@ int YieldStrategy::YieldFunction1(BMap* map, int* viableDirections, int sizeViab
 	    kd_res_next( set);
     }
 
-    	float avg = (float) sum / (float) size; 
+    	// DEBUG - if using density all values are 1 so avg is not correct use num of points
+    	//float avg = (float) sum / (float) size; 
 
-    	std::cout << "sum is: " << sum << " size is " << size  << " average is: " << avg << "\n";
+    	float avg = (float) sum; // (float) size; 
+    	
+	std::cout << "sum is: " << sum << " size is " << size  << " average is: " << avg << "\n";
 
 
-	if(avg > max) {
-		max = avg;
+	if(avg < min) {
+		std::cout << "setting new bearing\n";
+		min = avg;
 		targetBearing = direction;
 	}
 

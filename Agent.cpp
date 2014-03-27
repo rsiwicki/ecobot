@@ -358,9 +358,120 @@ void RunDiagnostic() {
 	std::cout << "Agent should MOVE 1 m 10 " << action->c << " " << action->m  << "\n";
 
 	delete wm2;
+	delete beliefs;
 
 	delete s;
 	delete sf;
+
+
+	std::cout << "---------------------------------------------\n";
+	std::cout << "Test Highest Yielding Strategy for turn\n";
+	std::cout << "---------------------------------------------\n";
+	
+	WorkingMemory* wm3;
+
+	wm3 = new WorkingMemory();
+	
+	s = sf->makeStrategy(StrategyTypes::HIGHEST_YIELD);
+
+	sensors[S0] = &read_within_range;
+	sensors[S90] = &read_within_range;
+	sensors[S180] = &read_within_range;
+	sensors[S270] = &read_within_range;
+	sensors[T0] = &read_at_range_15;
+	sensors[OR0] = &read_orientation_is_0;
+
+	agent_take_reading(sensors, wm3, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm3, ActionTypes::NOP); // start with NOPs
+	
+	beliefs = wm3->MaterializeWorld();	
+	
+	action = s->getHighestYieldingAction(sensors, beliefs, 0, 0, 0, 100);
+	std::cout << "Agent should TURN 0 m 0 " << action->c << " " << action->m  << "\n";
+
+	delete action;
+	delete wm3;
+	//delete beliefs;
+
+
+	std::cout << "Test 270 yield\n";
+
+	WorkingMemory* wm4;
+
+	wm4 = new WorkingMemory();
+
+	sensors[S0] = &read_at_range_20;
+	sensors[S90] = &read_at_range_20;
+	sensors[S180] = &read_at_range_20;
+	sensors[S270] = &read_beyond_range;
+	sensors[T0] = &read_at_range_15;
+	sensors[OR0] = &read_orientation_is_0;
+
+	agent_take_reading(sensors, wm4, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm4, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm4, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm4, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm4, ActionTypes::NOP); // start with NOPs
+
+	std::cout << "generating belief map from working memory\n";
+
+	beliefs = wm4->MaterializeWorld();	
+	
+	print_belief_map(beliefs);
+	std::cout << "print should show distant contact with an object on all sides but left\n";
+
+	action = s->getHighestYieldingAction(sensors, beliefs, 0, 0, 0, 100);
+	std::cout << "Agent should TURN 1 m 270 " << action->c << " " << action->m  << "\n";
+
+	delete action;
+	//delete wm4;
+	delete beliefs;
+
+
+
+	std::cout << "Test 180 multipoint yield\n";
+
+	WorkingMemory* wm7;
+
+	wm7 = new WorkingMemory();
+
+	sensors[S0] = &read_at_range_20;
+	sensors[S90] = &read_at_range_20;
+	sensors[S180] = &read_beyond_range;
+	sensors[S270] = &read_at_range_15;
+	sensors[T0] = &read_at_range_15;
+	sensors[OR0] = &read_orientation_is_0;
+
+	agent_take_reading(sensors, wm7, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm7, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm7, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm7, ActionTypes::NOP); // start with NOPs
+	agent_take_reading(sensors, wm7, ActionTypes::NOP); // start with NOPs
+
+	
+	std::cout << "generating belief map from working memory\n";
+
+	beliefs = wm7->MaterializeWorld();	
+	
+	print_belief_map(beliefs);
+	std::cout << "print should show distant contact with an object on all sides but left\n";
+
+	action = s->getHighestYieldingAction(sensors, beliefs, 0, 0, 0, 100);
+	std::cout << "Agent should TURN 1 m 180 " << action->c << " " << action->m  << "\n";
+
+	delete action;
+	//delete wm4;
+	delete beliefs;
+
+
+
+
+
+
+	delete s;
+	delete sf;
+
+
 
 }
 
