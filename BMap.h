@@ -18,6 +18,13 @@ class BMap {
 
 		Hn* GetPoint(int i);	
 
+		BMap() {;}
+		~BMap() { 
+		
+			for(int i=0; i< _size; i++) {
+				delete _points[i];
+			}
+		}
 };
 
 #endif
