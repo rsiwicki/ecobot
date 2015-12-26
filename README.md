@@ -14,6 +14,12 @@ Based on diagrams from Peter Norvigs book - Artificial Intelligence: A Modern Ap
 
 ![Agent Orient Software] (https://raw.githubusercontent.com/rsiwicki/ecobot/master/images/eco_brain.jpg)
 
+It will run on board like this
+
+![Yun] (https://www.arduino.cc/en/uploads/Main/A000008_featured.jpg)
+
+![Yun] (https://www.arduino.cc/en/uploads/Guide/YunParts.png)
+
 These are the base files for ecobot.
 
 To build just run
