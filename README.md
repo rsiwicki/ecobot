@@ -1,8 +1,9 @@
-ecobot
-======
+Ecobot - Autonomous Agent For Custom Microprocessor Hardware
+============================================================
 
 Autonomous Agent Brain Architecture
-=================================
+===================================
+
 
 ![Agent Orient Software] (https://raw.githubusercontent.com/rsiwicki/ecobot/master/images/eco_brain.jpg)
 
