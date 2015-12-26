@@ -1,9 +1,16 @@
 Ecobot - Autonomous Agent For Custom Microprocessor Hardware
 ============================================================
 
+Just a bit of fun with robots
+
+[![Robots](https://img.youtube.com/vi/cs2kMKAEXvA/0.jpg)](https://youtu.be/cs2kMKAEXvA)
+
 Autonomous Agent Brain Architecture
 ===================================
 
+The Automous Agent Executive (The Brain) was build with the objective of allowing the robot to move freely; learn it's environment and make decisions based on pluggable strategies. The agent builds a belief map that contains data about it's environment. Then it employs a strategy to find the highest yielding next best action. Upon taking this action sensors re-feedback data about the environment that influence the next roudn of decision making.
+
+Based on diagrams from Peter Norvigs book - Artificial Intelligence: A Modern Approach  (https://en.wikipedia.org/wiki/Artificial_Intelligence:_A_Modern_Approach)
 
 ![Agent Orient Software] (https://raw.githubusercontent.com/rsiwicki/ecobot/master/images/eco_brain.jpg)
 
