@@ -1,6 +1,11 @@
 ecobot
 ======
 
+Autonomous Agent Brain Architecture
+=================================
+
+![Agent Orient Software] (https://raw.githubusercontent.com/rsiwicki/ecobot/master/images/eco_brain.jpg)
+
 These are the base files for ecobot.
 
 To build just run
